@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
-import { colors } from "../theme";
+import { colors, fonts } from "../theme";
 import HomeScreen from "../screens/HomeScreen";
 import CaptureScreen from "../screens/CaptureScreen";
 import ResultsScreen from "../screens/ResultsScreen";
@@ -13,9 +13,10 @@ export default function RootNavigator() {
     <Stack.Navigator
       screenOptions={{
         headerStyle: { backgroundColor: colors.background },
-        headerTintColor: colors.ink,
+        headerTintColor: colors.gold,
         headerShadowVisible: false,
-        headerTitleStyle: { fontWeight: "700" },
+        headerTitleStyle: { fontFamily: fonts.displaySemi, fontSize: 18, color: colors.textPrimary },
+        contentStyle: { backgroundColor: colors.background },
       }}
     >
       <Stack.Screen

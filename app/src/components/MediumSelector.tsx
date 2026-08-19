@@ -1,7 +1,7 @@
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { MEDIA, Medium } from "../types";
-import { colors, radii, spacing, typography } from "../theme";
+import { colors, fonts, radii, shadows, spacing, typography } from "../theme";
 
 interface Props {
   value: Medium;
@@ -11,7 +11,7 @@ interface Props {
 export default function MediumSelector({ value, onChange }: Props) {
   return (
     <View>
-      <Text style={styles.label}>Choose your medium</Text>
+      <Text style={typography.label}>Choose Your Medium</Text>
       <View style={styles.row}>
         {MEDIA.map((option) => {
           const selected = option.value === value;
@@ -35,33 +35,32 @@ export default function MediumSelector({ value, onChange }: Props) {
 }
 
 const styles = StyleSheet.create({
-  label: {
-    ...typography.label,
-    marginBottom: spacing.sm,
-  },
   row: {
     flexDirection: "row",
     gap: spacing.sm,
+    marginTop: spacing.sm,
   },
   chip: {
     flex: 1,
-    paddingVertical: spacing.sm + 2,
+    paddingVertical: spacing.md,
     borderRadius: radii.md,
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
     alignItems: "center",
   },
   chipSelected: {
-    borderColor: colors.primary,
-    backgroundColor: "#FBEAE2",
+    borderColor: colors.gold,
+    backgroundColor: colors.surfaceElevated,
+    ...shadows.goldSubtle,
   },
   chipLabel: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: colors.inkMuted,
+    fontFamily: fonts.bodyMedium,
+    fontSize: 13,
+    color: colors.textMuted,
   },
   chipLabelSelected: {
-    color: colors.primaryDark,
+    fontFamily: fonts.bodySemiBold,
+    color: colors.gold,
   },
 });

@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { InstructionStep } from "../types";
-import { colors, radii, spacing, typography } from "../theme";
+import { colors, fonts, radii, shadows, spacing } from "../theme";
 
 export default function StepCard({ step }: { step: InstructionStep }) {
   return (
@@ -21,37 +21,40 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     backgroundColor: colors.surface,
-    borderRadius: radii.md,
+    borderRadius: radii.lg,
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.md,
     marginBottom: spacing.sm,
     gap: spacing.md,
+    ...shadows.card,
   },
   badge: {
-    width: 28,
-    height: 28,
+    width: 30,
+    height: 30,
     borderRadius: radii.pill,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.gold,
     alignItems: "center",
     justifyContent: "center",
   },
   badgeText: {
-    color: "#fff",
-    fontWeight: "700",
+    fontFamily: fonts.bodyBold,
+    color: colors.background,
     fontSize: 13,
   },
   content: {
     flex: 1,
   },
   title: {
-    ...typography.heading,
+    fontFamily: fonts.bodySemiBold,
     fontSize: 16,
+    color: colors.textPrimary,
     marginBottom: spacing.xs,
   },
   description: {
-    ...typography.body,
-    color: colors.inkMuted,
+    fontFamily: fonts.body,
+    fontSize: 14,
+    color: colors.textSecondary,
     lineHeight: 21,
   },
 });

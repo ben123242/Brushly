@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Text,
 } from "react-native";
-import { colors, radii, spacing } from "../theme";
+import { LinearGradient } from "expo-linear-gradient";
+import { colors, fonts, radii, shadows, spacing } from "../theme";
 
 interface Props {
   label: string;
@@ -24,24 +25,50 @@ export default function PrimaryButton({
   loading,
 }: Props) {
   const isSecondary = variant === "secondary";
+  const isDisabled = disabled || loading;
+
+  if (isSecondary) {
+    return (
+      <Pressable
+        onPress={onPress}
+        disabled={isDisabled}
+        style={({ pressed }) => [
+          styles.base,
+          styles.secondary,
+          isDisabled && styles.disabled,
+          pressed && !isDisabled && styles.pressedSecondary,
+        ]}
+      >
+        {loading ? (
+          <ActivityIndicator color={colors.gold} />
+        ) : (
+          <Text style={[styles.label, styles.labelSecondary]}>{label}</Text>
+        )}
+      </Pressable>
+    );
+  }
+
   return (
     <Pressable
       onPress={onPress}
-      disabled={disabled || loading}
+      disabled={isDisabled}
       style={({ pressed }) => [
-        styles.base,
-        isSecondary ? styles.secondary : styles.primary,
-        (disabled || loading) && styles.disabled,
-        pressed && !disabled && !loading && styles.pressed,
+        isDisabled && styles.disabled,
+        pressed && !isDisabled && styles.pressedPrimary,
       ]}
     >
-      {loading ? (
-        <ActivityIndicator color={isSecondary ? colors.primary : "#fff"} />
-      ) : (
-        <Text style={[styles.label, isSecondary && styles.labelSecondary]}>
-          {label}
-        </Text>
-      )}
+      <LinearGradient
+        colors={[colors.goldLight, colors.gold]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={[styles.base, shadows.gold]}
+      >
+        {loading ? (
+          <ActivityIndicator color={colors.background} />
+        ) : (
+          <Text style={[styles.label, styles.labelPrimary]}>{label}</Text>
+        )}
+      </LinearGradient>
     </Pressable>
   );
 }
@@ -53,28 +80,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 54,
-  },
-  primary: {
-    backgroundColor: colors.primary,
+    minHeight: 56,
   },
   secondary: {
-    backgroundColor: colors.surface,
+    backgroundColor: "transparent",
     borderWidth: 1.5,
-    borderColor: colors.primary,
+    borderColor: colors.gold,
   },
   disabled: {
-    opacity: 0.5,
+    opacity: 0.45,
   },
-  pressed: {
-    opacity: 0.85,
+  pressedPrimary: {
+    opacity: 0.9,
+  },
+  pressedSecondary: {
+    opacity: 0.65,
   },
   label: {
-    color: "#fff",
+    fontFamily: fonts.bodySemiBold,
     fontSize: 16,
-    fontWeight: "700",
+    letterSpacing: 0.3,
+  },
+  labelPrimary: {
+    color: colors.background,
   },
   labelSecondary: {
-    color: colors.primary,
+    color: colors.gold,
   },
 });

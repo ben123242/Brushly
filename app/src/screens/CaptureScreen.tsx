@@ -10,7 +10,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
-import { colors, radii, spacing, typography } from "../theme";
+import { colors, fonts, radii, shadows, spacing, typography } from "../theme";
 import PrimaryButton from "../components/PrimaryButton";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Capture">;
@@ -19,6 +19,10 @@ interface PickedPhoto {
   uri: string;
   base64: string;
   mimeType: string;
+}
+
+function mediumLabel(medium: string): string {
+  return medium.charAt(0).toUpperCase() + medium.slice(1);
 }
 
 export default function CaptureScreen({ navigation, route }: Props) {
@@ -81,10 +85,10 @@ export default function CaptureScreen({ navigation, route }: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={typography.heading}>Add a photo</Text>
+        <Text style={typography.title}>Add a Photo</Text>
         <Text style={typography.subtitle}>
-          Painting in {medium}. Take a photo of a scene, or choose one from
-          your library.
+          Painting in {mediumLabel(medium)}. Take a photo of a scene, or
+          choose one from your library.
         </Text>
       </View>
 
@@ -133,20 +137,25 @@ const styles = StyleSheet.create({
   },
   preview: {
     flex: 1,
-    borderRadius: radii.lg,
-    backgroundColor: colors.border,
+    borderRadius: radii.xl,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    ...shadows.card,
   },
   placeholder: {
     flex: 1,
-    borderRadius: radii.lg,
-    borderWidth: 2,
+    borderRadius: radii.xl,
+    borderWidth: 1.5,
     borderStyle: "dashed",
     borderColor: colors.border,
+    backgroundColor: colors.surface,
     alignItems: "center",
     justifyContent: "center",
   },
   placeholderText: {
-    color: colors.inkMuted,
+    fontFamily: fonts.body,
+    color: colors.textMuted,
     fontSize: 15,
   },
   actions: {

@@ -2,7 +2,7 @@ import React from "react";
 import Svg, { Polygon, Text as SvgText } from "react-native-svg";
 import { Shape } from "../types";
 
-const PALETTE = ["#D97B5F", "#5C8D7D", "#4A7FA7", "#C9A227", "#8E5B9A", "#B85F45"];
+const PALETTE = ["#E6C878", "#F1E9D8", "#6FA39A", "#C97B5F", "#A67BC9", "#7B93A6"];
 
 interface Props {
   shapes: Shape[];

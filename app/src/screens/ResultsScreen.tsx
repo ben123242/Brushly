@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   Image,
   LayoutChangeEvent,
   SafeAreaView,
@@ -11,34 +10,37 @@ import {
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, AnalysisResult } from "../types";
-import { colors, radii, spacing, typography } from "../theme";
+import { colors, fonts, radii, shadows, spacing, typography } from "../theme";
 import { analyzePainting } from "../services/api";
 import OutlineOverlay from "../components/OutlineOverlay";
 import StepCard from "../components/StepCard";
 import PrimaryButton from "../components/PrimaryButton";
+import AnalyzingScreen from "../components/AnalyzingScreen";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Results">;
+type Phase = "loading" | "finishing" | "done" | "error";
 
 export default function ResultsScreen({ navigation, route }: Props) {
   const { photoUri, base64, mimeType, medium } = route.params;
+  const [phase, setPhase] = useState<Phase>("loading");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
+    setPhase("loading");
     setError(null);
     analyzePainting({ base64, mimeType, medium })
       .then((data) => {
-        if (!cancelled) setResult(data);
+        if (cancelled) return;
+        setResult(data);
+        setPhase("finishing");
       })
       .catch((err) => {
-        if (!cancelled) setError(err.message ?? "Something went wrong.");
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
+        if (cancelled) return;
+        setError(err.message ?? "Something went wrong.");
+        setPhase("error");
       });
     return () => {
       cancelled = true;
@@ -50,22 +52,21 @@ export default function ResultsScreen({ navigation, route }: Props) {
     setImageSize({ width, height });
   }
 
-  if (loading) {
+  if (phase === "loading" || phase === "finishing") {
     return (
-      <SafeAreaView style={[styles.container, styles.centered]}>
-        <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={[typography.subtitle, { marginTop: spacing.md }]}>
-          Analyzing your scene...
-        </Text>
-      </SafeAreaView>
+      <AnalyzingScreen
+        medium={medium}
+        phase={phase}
+        onFinishComplete={() => setPhase("done")}
+      />
     );
   }
 
-  if (error || !result) {
+  if (phase === "error" || !result) {
     return (
       <SafeAreaView style={[styles.container, styles.centered]}>
-        <Text style={typography.heading}>Couldn't analyze this photo</Text>
-        <Text style={[typography.subtitle, styles.errorText]}>{error}</Text>
+        <Text style={styles.errorTitle}>Couldn't analyze this photo</Text>
+        <Text style={styles.errorMessage}>{error}</Text>
         <View style={styles.retryButton}>
           <PrimaryButton label="Go Back" onPress={() => navigation.goBack()} />
         </View>
@@ -76,7 +77,7 @@ export default function ResultsScreen({ navigation, route }: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.mediumLabel}>{medium.toUpperCase()}</Text>
+        <Text style={typography.label}>{medium.toUpperCase()}</Text>
         <View style={styles.imageWrapper} onLayout={onImageLayout}>
           <Image source={{ uri: photoUri }} style={styles.image} />
           <OutlineOverlay
@@ -90,7 +91,7 @@ export default function ResultsScreen({ navigation, route }: Props) {
           <Text style={styles.summary}>{result.summary}</Text>
         )}
 
-        <Text style={[typography.heading, styles.stepsTitle]}>
+        <Text style={[typography.title, styles.stepsTitle]}>
           Painting Steps
         </Text>
         {result.instructions.map((step) => (
@@ -119,9 +120,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: spacing.lg,
   },
-  errorText: {
+  errorTitle: {
+    fontFamily: fonts.displaySemi,
+    fontSize: 20,
+    color: colors.textPrimary,
     textAlign: "center",
-    marginTop: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  errorMessage: {
+    fontFamily: fonts.body,
+    fontSize: 14,
+    color: colors.textSecondary,
+    textAlign: "center",
     marginBottom: spacing.lg,
   },
   retryButton: {
@@ -130,31 +140,32 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: spacing.lg,
   },
-  mediumLabel: {
-    ...typography.label,
-    color: colors.primaryDark,
-    marginBottom: spacing.sm,
-  },
   imageWrapper: {
     width: "100%",
     aspectRatio: 1,
-    borderRadius: radii.lg,
+    borderRadius: radii.xl,
     overflow: "hidden",
-    backgroundColor: colors.border,
-    marginBottom: spacing.md,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginTop: spacing.sm,
+    marginBottom: spacing.lg,
+    ...shadows.card,
   },
   image: {
     width: "100%",
     height: "100%",
   },
   summary: {
-    ...typography.body,
-    color: colors.inkMuted,
+    fontFamily: fonts.body,
+    fontSize: 14,
+    color: colors.textSecondary,
     fontStyle: "italic",
     marginBottom: spacing.lg,
+    lineHeight: 21,
   },
   stepsTitle: {
-    marginBottom: spacing.sm,
+    marginBottom: spacing.md,
   },
   footerButton: {
     marginTop: spacing.lg,

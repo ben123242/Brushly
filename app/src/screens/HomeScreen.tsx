@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, Medium } from "../types";
-import { colors, spacing, typography } from "../theme";
+import { colors, radii, shadows, spacing, typography } from "../theme";
 import MediumSelector from "../components/MediumSelector";
 import PrimaryButton from "../components/PrimaryButton";
 
@@ -14,10 +14,11 @@ export default function HomeScreen({ navigation }: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.logo}>🎨 Brushly</Text>
+        <Text style={typography.logo}>Brushly</Text>
+        <View style={styles.rule} />
         <Text style={typography.subtitle}>
-          Photograph any scene and get a simplified outline plus step-by-step
-          painting instructions — made for beginners.
+          Photograph any scene and receive a simplified outline plus a
+          step-by-step painting guide, crafted for beginners.
         </Text>
       </View>
 
@@ -43,19 +44,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   hero: {
-    marginTop: spacing.xl,
-    gap: spacing.sm,
+    marginTop: spacing.xxl,
+    gap: spacing.md,
   },
-  logo: {
-    ...typography.title,
-    marginBottom: spacing.xs,
+  rule: {
+    width: 48,
+    height: 2,
+    backgroundColor: colors.gold,
   },
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 18,
+    borderRadius: radii.xl,
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.lg,
+    ...shadows.card,
   },
   footer: {
     marginBottom: spacing.md,
