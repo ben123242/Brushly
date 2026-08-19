@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Brushly",
+    "slug": "brushly",
+    "scheme": "brushly",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Brushly needs camera access so you can photograph a scene to turn into a painting lesson.",
+        "NSPhotoLibraryUsageDescription": "Brushly needs photo library access so you can choose a scene to turn into a painting lesson."
+      }
+    },
+    "android": {
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE"]
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Brushly needs photo library access so you can choose a scene to turn into a painting lesson.",
+          "cameraPermission": "Brushly needs camera access so you can photograph a scene to turn into a painting lesson."
+        }
+      ]
+    ]
+  }
+}
