@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { AnalyzeRequestBody, Medium } from "../types";
+import { AnalyzeRequestBody, Medium, SkillLevel } from "../types";
 import { analyzePhotoWithClaude } from "../lib/anthropic";
 
 const VALID_MEDIA: Medium[] = ["watercolor", "acrylic", "oil"];
+const VALID_SKILL_LEVELS: SkillLevel[] = ["beginner", "intermediate", "advanced"];
 
 export const analyzeRouter = Router();
 
@@ -17,6 +18,11 @@ analyzeRouter.post("/analyze", async (req, res) => {
       .status(400)
       .json({ error: `medium must be one of: ${VALID_MEDIA.join(", ")}` });
   }
+  if (!body.skillLevel || !VALID_SKILL_LEVELS.includes(body.skillLevel)) {
+    return res
+      .status(400)
+      .json({ error: `skillLevel must be one of: ${VALID_SKILL_LEVELS.join(", ")}` });
+  }
 
   const mimeType = body.mimeType || "image/jpeg";
 
@@ -24,7 +30,8 @@ analyzeRouter.post("/analyze", async (req, res) => {
     const result = await analyzePhotoWithClaude(
       body.imageBase64,
       mimeType,
-      body.medium
+      body.medium,
+      body.skillLevel
     );
     return res.json(result);
   } catch (err) {

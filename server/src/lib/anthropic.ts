@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { Medium, AnalysisResult } from "../types";
+import { Medium, SkillLevel, AnalysisResult } from "../types";
 import { buildSystemPrompt, USER_PROMPT_TEXT } from "../prompt";
 
 let client: Anthropic | null = null;
@@ -53,8 +53,30 @@ const ANALYSIS_TOOL = {
             title: { type: "string" },
             description: { type: "string" },
             zoneIds: { type: "array", items: { type: "string" } },
+            colorMix: {
+              type: "string",
+              description:
+                "Exact paint colors and mixing ratio for this step, e.g. 'Titanium White + Cerulean Blue, 3:1 ratio'.",
+            },
+            swatchHex: {
+              type: "string",
+              description: "Approximate resulting hex color of the mix, e.g. '#9FC6DE', for a small preview swatch.",
+            },
+            brush: {
+              type: "string",
+              description: "Brush type and size, e.g. 'Flat brush, size 12' or 'Round brush, size 4 (detail)'.",
+            },
+            technique: {
+              type: "string",
+              description:
+                "The specific stroke technique and direction, e.g. 'Long horizontal strokes, light pressure'.",
+            },
+            duration: {
+              type: "string",
+              description: "Roughly how long this step should take, e.g. '10-15 minutes'.",
+            },
           },
-          required: ["step", "title", "description"],
+          required: ["step", "title", "description", "colorMix", "brush", "technique", "duration"],
         },
       },
       summary: { type: "string" },
@@ -66,15 +88,16 @@ const ANALYSIS_TOOL = {
 export async function analyzePhotoWithClaude(
   imageBase64: string,
   mimeType: string,
-  medium: Medium
+  medium: Medium,
+  skillLevel: SkillLevel
 ): Promise<AnalysisResult> {
   const anthropic = getClient();
   const model = process.env.ANTHROPIC_MODEL || "claude-sonnet-5";
 
   const response = await anthropic.messages.create({
     model,
-    max_tokens: 2048,
-    system: buildSystemPrompt(medium),
+    max_tokens: 4096,
+    system: buildSystemPrompt(medium, skillLevel),
     tools: [ANALYSIS_TOOL],
     tool_choice: { type: "tool", name: ANALYSIS_TOOL.name },
     messages: [

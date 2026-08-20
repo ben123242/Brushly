@@ -1,19 +1,30 @@
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { MEDIA, Medium } from "../types";
 import { colors, fonts, radii, shadows, spacing, typography } from "../theme";
 
-interface Props {
-  value: Medium;
-  onChange: (medium: Medium) => void;
+interface Option<T extends string> {
+  value: T;
+  label: string;
 }
 
-export default function MediumSelector({ value, onChange }: Props) {
+interface Props<T extends string> {
+  label: string;
+  options: Option<T>[];
+  value: T;
+  onChange: (value: T) => void;
+}
+
+export default function ChipSelector<T extends string>({
+  label,
+  options,
+  value,
+  onChange,
+}: Props<T>) {
   return (
     <View>
-      <Text style={typography.label}>Choose Your Medium</Text>
+      <Text style={typography.label}>{label}</Text>
       <View style={styles.row}>
-        {MEDIA.map((option) => {
+        {options.map((option) => {
           const selected = option.value === value;
           return (
             <Pressable

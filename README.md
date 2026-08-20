@@ -1,9 +1,14 @@
 # Brushly
 
-Brushly turns a photo of a real-world scene into a beginner-friendly painting lesson. Take or upload a photo, pick your medium (watercolor, acrylic, or oil), and Brushly uses Claude's vision API to:
+Brushly turns a photo of a real-world scene into a painting lesson tailored to your medium and skill
+level. Take or upload a photo, pick your medium (watercolor, acrylic, or oil) and skill level
+(beginner, intermediate, or advanced), and Brushly uses Claude's vision API to:
 
 1. Overlay a simplified outline of the main shapes/zones to paint on top of your photo.
-2. Generate step-by-step instructions tailored to your chosen medium.
+2. Generate detailed, sequential step-by-step instructions — each with the exact colors and mixing
+   ratio, brush type and size, stroke technique, and roughly how long the step should take — tailored
+   to your chosen medium and skill level (beginners get the most hand-holding; advanced painters get
+   concise, less basic guidance).
 
 ## Architecture
 
@@ -45,8 +50,9 @@ npm start                  # opens Expo dev tools — press i / a, or scan the Q
 
 ## How analysis works
 
-`POST /api/analyze` on the server accepts `{ imageBase64, mimeType, medium }` and calls Claude with
-a forced tool call (`return_painting_analysis`) so the response is always well-formed JSON:
+`POST /api/analyze` on the server accepts `{ imageBase64, mimeType, medium, skillLevel }` and calls
+Claude with a forced tool call (`return_painting_analysis`) so the response is always well-formed
+JSON:
 
 ```json
 {
@@ -54,7 +60,17 @@ a forced tool call (`return_painting_analysis`) so the response is always well-f
     { "id": "sky", "label": "Sky", "points": [[0.0, 0.0], [1.0, 0.0], [1.0, 0.35], [0.0, 0.4]], "colorHint": "#7EC8E3" }
   ],
   "instructions": [
-    { "step": 1, "title": "Block in the sky", "description": "...", "zoneIds": ["sky"] }
+    {
+      "step": 1,
+      "title": "Block in the sky",
+      "description": "...",
+      "zoneIds": ["sky"],
+      "colorMix": "Titanium White + Cerulean Blue, 3:1 ratio",
+      "swatchHex": "#9FC6DE",
+      "brush": "Flat brush, size 12",
+      "technique": "Long horizontal strokes, blending top to bottom",
+      "duration": "10 minutes"
+    }
   ]
 }
 ```
@@ -73,5 +89,11 @@ in the app needs to change.
 
 - The mobile app deliberately keeps the UI simple: three screens, large buttons, minimal choices.
 - `expo-image-picker` is used for both "take a photo" and "choose from library" — no custom camera
-  viewfinder is built, keeping the capture flow reliable across devices.
+  viewfinder is built, keeping the capture flow reliable across devices. The picker itself is asked
+  for a URI only (not base64); `app/src/utils/imageProcessing.ts` then resizes the photo to a max
+  width of 1200px and re-encodes it as a JPEG at quality 0.8 via `expo-image-manipulator` before it's
+  sent to the backend — encoding a full-resolution camera capture directly is what made the picker
+  feel sluggish on Android.
+- Each step card shows a small thumbnail of the photo with that step's zone(s) highlighted
+  (`app/src/components/ZoneThumbnail.tsx`), reusing the same shape polygons as the main outline.
 - This is a scaffold meant to be extended (e.g. persisting past paintings, auth, sharing).

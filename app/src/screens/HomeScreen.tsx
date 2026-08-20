@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList, Medium } from "../types";
+import { RootStackParamList, MEDIA, Medium, SKILL_LEVELS, SkillLevel } from "../types";
 import { colors, radii, shadows, spacing, typography } from "../theme";
-import MediumSelector from "../components/MediumSelector";
+import ChipSelector from "../components/ChipSelector";
 import PrimaryButton from "../components/PrimaryButton";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 export default function HomeScreen({ navigation }: Props) {
   const [medium, setMedium] = useState<Medium>("watercolor");
+  const [skillLevel, setSkillLevel] = useState<SkillLevel>("beginner");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -18,18 +19,32 @@ export default function HomeScreen({ navigation }: Props) {
         <View style={styles.rule} />
         <Text style={typography.subtitle}>
           Photograph any scene and receive a simplified outline plus a
-          step-by-step painting guide, crafted for beginners.
+          step-by-step painting guide, tailored to your experience.
         </Text>
       </View>
 
       <View style={styles.card}>
-        <MediumSelector value={medium} onChange={setMedium} />
+        <ChipSelector
+          label="Choose Your Medium"
+          options={MEDIA}
+          value={medium}
+          onChange={setMedium}
+        />
+        <View style={styles.divider} />
+        <ChipSelector
+          label="Your Skill Level"
+          options={SKILL_LEVELS}
+          value={skillLevel}
+          onChange={setSkillLevel}
+        />
       </View>
 
       <View style={styles.footer}>
         <PrimaryButton
           label="Start a New Painting"
-          onPress={() => navigation.navigate("Capture", { medium })}
+          onPress={() =>
+            navigation.navigate("Capture", { medium, skillLevel })
+          }
         />
       </View>
     </SafeAreaView>
@@ -59,6 +74,11 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: spacing.lg,
     ...shadows.card,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: colors.border,
+    marginVertical: spacing.lg,
   },
   footer: {
     marginBottom: spacing.md,

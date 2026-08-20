@@ -21,7 +21,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "Results">;
 type Phase = "loading" | "finishing" | "done" | "error";
 
 export default function ResultsScreen({ navigation, route }: Props) {
-  const { photoUri, base64, mimeType, medium } = route.params;
+  const { photoUri, base64, mimeType, medium, skillLevel } = route.params;
   const [phase, setPhase] = useState<Phase>("loading");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +31,7 @@ export default function ResultsScreen({ navigation, route }: Props) {
     let cancelled = false;
     setPhase("loading");
     setError(null);
-    analyzePainting({ base64, mimeType, medium })
+    analyzePainting({ base64, mimeType, medium, skillLevel })
       .then((data) => {
         if (cancelled) return;
         setResult(data);
@@ -45,7 +45,7 @@ export default function ResultsScreen({ navigation, route }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [base64, mimeType, medium]);
+  }, [base64, mimeType, medium, skillLevel]);
 
   function onImageLayout(event: LayoutChangeEvent) {
     const { width, height } = event.nativeEvent.layout;
@@ -77,7 +77,9 @@ export default function ResultsScreen({ navigation, route }: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={typography.label}>{medium.toUpperCase()}</Text>
+        <Text style={typography.label}>
+          {skillLevel.toUpperCase()} · {medium.toUpperCase()}
+        </Text>
         <View style={styles.imageWrapper} onLayout={onImageLayout}>
           <Image source={{ uri: photoUri }} style={styles.image} />
           <OutlineOverlay
@@ -95,7 +97,12 @@ export default function ResultsScreen({ navigation, route }: Props) {
           Painting Steps
         </Text>
         {result.instructions.map((step) => (
-          <StepCard key={step.step} step={step} />
+          <StepCard
+            key={step.step}
+            step={step}
+            photoUri={photoUri}
+            shapes={result.shapes}
+          />
         ))}
 
         <View style={styles.footerButton}>

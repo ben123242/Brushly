@@ -1,8 +1,13 @@
 import React from "react";
-import Svg, { Polygon, Text as SvgText } from "react-native-svg";
+import Svg, { Polygon, Rect, Text as SvgText } from "react-native-svg";
 import { Shape } from "../types";
 
 const PALETTE = ["#E6C878", "#F1E9D8", "#6FA39A", "#C97B5F", "#A67BC9", "#7B93A6"];
+
+const FONT_SIZE = 15;
+const LABEL_H_PADDING = 9;
+const LABEL_V_PADDING = 5;
+const CHAR_WIDTH_ESTIMATE = FONT_SIZE * 0.62;
 
 interface Props {
   shapes: Shape[];
@@ -31,6 +36,10 @@ export default function OutlineOverlay({ shapes, width, height }: Props) {
         const cx = (centroid[0] / shape.points.length) * width;
         const cy = (centroid[1] / shape.points.length) * height;
 
+        const labelWidth =
+          shape.label.length * CHAR_WIDTH_ESTIMATE + LABEL_H_PADDING * 2;
+        const labelHeight = FONT_SIZE + LABEL_V_PADDING * 2;
+
         return (
           <React.Fragment key={shape.id}>
             <Polygon
@@ -41,15 +50,23 @@ export default function OutlineOverlay({ shapes, width, height }: Props) {
               strokeWidth={2.5}
               strokeDasharray="6,4"
             />
+            <Rect
+              x={cx - labelWidth / 2}
+              y={cy - labelHeight / 2}
+              width={labelWidth}
+              height={labelHeight}
+              rx={labelHeight / 2}
+              fill="rgba(11, 11, 13, 0.88)"
+              stroke={color}
+              strokeWidth={1.25}
+            />
             <SvgText
               x={cx}
-              y={cy}
-              fill={color}
-              fontSize={13}
+              y={cy + FONT_SIZE * 0.34}
+              fill="#FFFFFF"
+              fontSize={FONT_SIZE}
               fontWeight="700"
               textAnchor="middle"
-              stroke="#fff"
-              strokeWidth={3}
             >
               {shape.label}
             </SvgText>
