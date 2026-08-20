@@ -26,8 +26,14 @@ const ANALYSIS_TOOL = {
         items: {
           type: "object",
           properties: {
-            id: { type: "string", description: "Short unique identifier, e.g. 'sky'." },
-            label: { type: "string", description: "Human-readable label, e.g. 'Sky'." },
+            id: { type: "string", description: "Short unique identifier, e.g. 'palace-building'." },
+            label: {
+              type: "string",
+              description:
+                "Specific, photo-grounded label naming the real thing in the photo, e.g. 'Palace building' " +
+                "or 'Cobblestone ground' or 'Cloudy sky' -- never a generic placeholder like 'Main subject' " +
+                "or 'Distant hills'.",
+            },
             points: {
               type: "array",
               description: "Polygon points as [x, y], normalized 0-1.",
@@ -51,7 +57,15 @@ const ANALYSIS_TOOL = {
           properties: {
             step: { type: "number" },
             title: { type: "string" },
-            description: { type: "string" },
+            description: {
+              type: "string",
+              description:
+                "A fully self-contained, jargon-free narrative a first-time painter could follow with no " +
+                "other context: which area of the canvas to work on, where to start and which direction to " +
+                "work, the exact brush and colors loaded onto it, and the physical stroke motion. Explain " +
+                "any technique term in plain English the moment it appears in this step's own text -- never " +
+                "assume an earlier step's explanation carries over. This bar applies at every skill level.",
+            },
             zoneIds: { type: "array", items: { type: "string" } },
             colorMix: {
               type: "string",
@@ -96,7 +110,7 @@ export async function analyzePhotoWithClaude(
 
   const response = await anthropic.messages.create({
     model,
-    max_tokens: 4096,
+    max_tokens: 8000,
     system: buildSystemPrompt(medium, skillLevel),
     tools: [ANALYSIS_TOOL],
     tool_choice: { type: "tool", name: ANALYSIS_TOOL.name },
@@ -117,6 +131,12 @@ export async function analyzePhotoWithClaude(
       },
     ],
   });
+
+  if (response.stop_reason === "max_tokens") {
+    throw new Error(
+      "Claude's response was cut off before completing the analysis. Please try again."
+    );
+  }
 
   const toolUse = response.content.find(
     (block): block is Anthropic.ToolUseBlock => block.type === "tool_use"

@@ -1,13 +1,13 @@
 import React from "react";
 import Svg, { Polygon, Rect, Text as SvgText } from "react-native-svg";
 import { Shape } from "../types";
+import { centroidOf, estimateLabelBoxSize } from "../utils/shapeGeometry";
 
 const PALETTE = ["#E6C878", "#F1E9D8", "#6FA39A", "#C97B5F", "#A67BC9", "#7B93A6"];
 
 const FONT_SIZE = 15;
 const LABEL_H_PADDING = 9;
 const LABEL_V_PADDING = 5;
-const CHAR_WIDTH_ESTIMATE = FONT_SIZE * 0.62;
 
 interface Props {
   shapes: Shape[];
@@ -29,16 +29,16 @@ export default function OutlineOverlay({ shapes, width, height }: Props) {
         const scaledPoints = shape.points
           .map(([x, y]) => `${x * width},${y * height}`)
           .join(" ");
-        const centroid = shape.points.reduce(
-          (acc, [x, y]) => [acc[0] + x, acc[1] + y],
-          [0, 0]
-        );
-        const cx = (centroid[0] / shape.points.length) * width;
-        const cy = (centroid[1] / shape.points.length) * height;
+        const [centroidX, centroidY] = centroidOf(shape.points);
+        const cx = centroidX * width;
+        const cy = centroidY * height;
 
-        const labelWidth =
-          shape.label.length * CHAR_WIDTH_ESTIMATE + LABEL_H_PADDING * 2;
-        const labelHeight = FONT_SIZE + LABEL_V_PADDING * 2;
+        const { width: labelWidth, height: labelHeight } = estimateLabelBoxSize(
+          shape.label,
+          FONT_SIZE,
+          LABEL_H_PADDING,
+          LABEL_V_PADDING
+        );
 
         return (
           <React.Fragment key={shape.id}>

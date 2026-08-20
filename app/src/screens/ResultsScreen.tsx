@@ -9,13 +9,14 @@ import {
   View,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList, AnalysisResult } from "../types";
+import { RootStackParamList, AnalysisResult, InstructionStep } from "../types";
 import { colors, fonts, radii, shadows, spacing, typography } from "../theme";
 import { analyzePainting } from "../services/api";
 import OutlineOverlay from "../components/OutlineOverlay";
 import StepCard from "../components/StepCard";
 import PrimaryButton from "../components/PrimaryButton";
 import AnalyzingScreen from "../components/AnalyzingScreen";
+import ZoneDetailModal from "../components/ZoneDetailModal";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Results">;
 type Phase = "loading" | "finishing" | "done" | "error";
@@ -26,6 +27,7 @@ export default function ResultsScreen({ navigation, route }: Props) {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const [expandedStep, setExpandedStep] = useState<InstructionStep | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -102,6 +104,7 @@ export default function ResultsScreen({ navigation, route }: Props) {
             step={step}
             photoUri={photoUri}
             shapes={result.shapes}
+            onExpand={() => setExpandedStep(step)}
           />
         ))}
 
@@ -113,6 +116,15 @@ export default function ResultsScreen({ navigation, route }: Props) {
           />
         </View>
       </ScrollView>
+
+      <ZoneDetailModal
+        visible={!!expandedStep}
+        onClose={() => setExpandedStep(null)}
+        photoUri={photoUri}
+        shapes={result.shapes}
+        activeZoneIds={expandedStep?.zoneIds}
+        stepTitle={expandedStep?.title}
+      />
     </SafeAreaView>
   );
 }

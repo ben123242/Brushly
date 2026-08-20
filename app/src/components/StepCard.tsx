@@ -1,30 +1,36 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import {
+  LayoutChangeEvent,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { InstructionStep, Shape } from "../types";
 import { colors, fonts, radii, shadows, spacing } from "../theme";
 import ZoneThumbnail from "./ZoneThumbnail";
+import { buildWhatToPaintText } from "../utils/zoneDescription";
 
 interface Props {
   step: InstructionStep;
   photoUri: string;
   shapes: Shape[];
+  onExpand?: () => void;
 }
 
-export default function StepCard({ step, photoUri, shapes }: Props) {
+export default function StepCard({ step, photoUri, shapes, onExpand }: Props) {
   const hasDetails = step.colorMix || step.brush || step.technique;
+  const [thumbSize, setThumbSize] = useState(0);
+
+  function onThumbnailLayout(event: LayoutChangeEvent) {
+    setThumbSize(event.nativeEvent.layout.width);
+  }
 
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <View style={styles.thumbnailWrapper}>
-          <ZoneThumbnail
-            photoUri={photoUri}
-            shapes={shapes}
-            activeZoneIds={step.zoneIds}
-          />
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{step.step}</Text>
-          </View>
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{step.step}</Text>
         </View>
         <View style={styles.headerText}>
           <Text style={styles.title}>{step.title}</Text>
@@ -32,6 +38,31 @@ export default function StepCard({ step, photoUri, shapes }: Props) {
             <Text style={styles.duration}>{step.duration}</Text>
           )}
         </View>
+      </View>
+
+      <Pressable
+        onPress={onExpand}
+        onLayout={onThumbnailLayout}
+        style={styles.thumbnailPressable}
+      >
+        {thumbSize > 0 && (
+          <ZoneThumbnail
+            photoUri={photoUri}
+            shapes={shapes}
+            activeZoneIds={step.zoneIds}
+            size={thumbSize}
+          />
+        )}
+        <View style={styles.enlargeChip}>
+          <Text style={styles.enlargeChipText}>Tap to enlarge</Text>
+        </View>
+      </Pressable>
+
+      <View style={styles.whatToPaintBlock}>
+        <Text style={styles.whatToPaintLabel}>What to Paint Here</Text>
+        <Text style={styles.whatToPaintText}>
+          {buildWhatToPaintText(step.zoneIds, shapes)}
+        </Text>
       </View>
 
       {hasDetails && (
@@ -91,28 +122,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.md,
-    marginBottom: spacing.sm,
-  },
-  thumbnailWrapper: {
-    position: "relative",
+    marginBottom: spacing.md,
   },
   badge: {
-    position: "absolute",
-    top: -6,
-    left: -6,
-    width: 22,
-    height: 22,
+    width: 28,
+    height: 28,
     borderRadius: radii.pill,
     backgroundColor: colors.gold,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 2,
-    borderColor: colors.surface,
   },
   badgeText: {
     fontFamily: fonts.bodyBold,
     color: colors.background,
-    fontSize: 11,
+    fontSize: 13,
   },
   headerText: {
     flex: 1,
@@ -127,6 +150,55 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodyMedium,
     fontSize: 12,
     color: colors.gold,
+  },
+  thumbnailPressable: {
+    position: "relative",
+    width: "100%",
+    aspectRatio: 1,
+    borderRadius: radii.lg,
+    overflow: "hidden",
+    backgroundColor: colors.surfaceElevated,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: spacing.md,
+  },
+  enlargeChip: {
+    position: "absolute",
+    bottom: spacing.sm,
+    right: spacing.sm,
+    paddingVertical: 4,
+    paddingHorizontal: spacing.sm,
+    borderRadius: radii.pill,
+    backgroundColor: "rgba(11, 11, 13, 0.78)",
+  },
+  enlargeChipText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 11,
+    color: colors.gold,
+  },
+  whatToPaintBlock: {
+    backgroundColor: colors.surfaceElevated,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.borderSubtle,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.gold,
+    padding: spacing.sm,
+    marginBottom: spacing.sm,
+    gap: 2,
+  },
+  whatToPaintLabel: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 10,
+    letterSpacing: 1,
+    textTransform: "uppercase",
+    color: colors.gold,
+  },
+  whatToPaintText: {
+    fontFamily: fonts.body,
+    fontSize: 13,
+    color: colors.textSecondary,
+    lineHeight: 19,
   },
   detailsBlock: {
     backgroundColor: colors.surfaceElevated,

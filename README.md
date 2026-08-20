@@ -4,11 +4,14 @@ Brushly turns a photo of a real-world scene into a painting lesson tailored to y
 level. Take or upload a photo, pick your medium (watercolor, acrylic, or oil) and skill level
 (beginner, intermediate, or advanced), and Brushly uses Claude's vision API to:
 
-1. Overlay a simplified outline of the main shapes/zones to paint on top of your photo.
+1. Overlay a simplified outline of the main shapes/zones to paint on top of your photo, each labeled
+   with a specific, photo-grounded name (e.g. "Palace building", "Cobblestone ground", "Cloudy sky")
+   rather than a generic placeholder.
 2. Generate detailed, sequential step-by-step instructions — each with the exact colors and mixing
-   ratio, brush type and size, stroke technique, and roughly how long the step should take — tailored
-   to your chosen medium and skill level (beginners get the most hand-holding; advanced painters get
-   concise, less basic guidance).
+   ratio, brush type and size, stroke technique, and roughly how long the step should take, written as
+   a fully spelled-out, jargon-free narrative a first-time painter could follow with no other context.
+   Skill level changes step count and scope (beginners get more, smaller steps; advanced painters get
+   fewer, larger ones) but never drops the plain-English clarity bar.
 
 ## Architecture
 
@@ -57,13 +60,13 @@ JSON:
 ```json
 {
   "shapes": [
-    { "id": "sky", "label": "Sky", "points": [[0.0, 0.0], [1.0, 0.0], [1.0, 0.35], [0.0, 0.4]], "colorHint": "#7EC8E3" }
+    { "id": "palace", "label": "Palace building", "points": [[0.1, 0.1], [0.9, 0.1], [0.9, 0.6], [0.1, 0.55]], "colorHint": "#D8C7A8" }
   ],
   "instructions": [
     {
       "step": 1,
-      "title": "Block in the sky",
-      "description": "...",
+      "title": "Paint the sky",
+      "description": "Paint the sky area first. Start from the top of your canvas and work downward. Use a large flat brush loaded with a mix of Titanium White and Cerulean Blue. Make long, smooth horizontal strokes going left to right.",
       "zoneIds": ["sky"],
       "colorMix": "Titanium White + Cerulean Blue, 3:1 ratio",
       "swatchHex": "#9FC6DE",
@@ -100,6 +103,13 @@ in the app needs to change.
   width of 1200px and re-encodes it as a JPEG at quality 0.8 via `expo-image-manipulator` before it's
   sent to the backend — encoding a full-resolution camera capture directly is what made the picker
   feel sluggish on Android.
-- Each step card shows a small thumbnail of the photo with that step's zone(s) highlighted
-  (`app/src/components/ZoneThumbnail.tsx`), reusing the same shape polygons as the main outline.
+- Each step card shows a large, tappable thumbnail of the photo with that step's zone(s) highlighted
+  (`app/src/components/ZoneThumbnail.tsx`, sized responsively to the card's full width), reusing the
+  same shape polygons as the main outline. Tapping it opens `app/src/components/ZoneDetailModal.tsx`,
+  a fullscreen view of the photo with the zone boldly highlighted and labeled. Each card also has a
+  "What to Paint Here" callout (`app/src/utils/zoneDescription.ts`) that deterministically turns a
+  step's `zoneIds` into a plain-English sentence naming the zone and roughly where it sits in the
+  photo — this is derived client-side from the real shape data rather than AI-generated, so it can't
+  be inaccurate. Shared centroid/label-sizing math lives in `app/src/utils/shapeGeometry.ts`, used by
+  both `OutlineOverlay` and `ZoneDetailModal`.
 - This is a scaffold meant to be extended (e.g. persisting past paintings, auth, sharing).

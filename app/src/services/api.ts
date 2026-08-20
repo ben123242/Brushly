@@ -54,7 +54,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
         "Wet the paper first, then lay long horizontal strokes and let the color bleed softly at the edges (wet-on-wet).",
       duration: "8-10 minutes, plus drying time",
       description:
-        "Sketch the main shapes lightly in pencil first — watercolor can't cover mistakes. Then wet the sky area and drop in a very light wash, letting it settle unevenly for a natural look.",
+        "Paint the sky area first. Start from the top of your paper and work downward. Wet the paper with a clean, damp brush, then load your large flat wash brush with Cerulean Blue that's been diluted with plenty of water. Make long, smooth horizontal strokes going left to right — because the paper is wet, the edges of each stroke will bleed softly into the next, which is exactly what you want.",
     },
     {
       colorMix: "Yellow Ochre + Sap Green, roughly 1:1, kept fairly diluted",
@@ -64,7 +64,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
         "Wet-on-dry: apply in loose, broken strokes following the horizon line so some paper texture shows through.",
       duration: "10-12 minutes",
       description:
-        "Once the sky is fully dry, block in the distant background shapes with a mid-value green-gold wash. Keep edges soft here — anything far away should look slightly hazy.",
+        "Once the sky is completely dry to the touch, paint the rolling hills sitting just below it. Load a medium round brush (size 8) with Yellow Ochre and Sap Green mixed roughly half and half, diluted with water to a mid-strength wash. This time work on dry paper (called \"wet-on-dry\"), and make loose, slightly broken strokes that follow the up-and-down curve of the hills — don't cover every bit of paper solidly, since small gaps of texture showing through make distant hills look soft and hazy.",
     },
     {
       colorMix: "Burnt Sienna + Ultramarine Blue, 2:1, for a warm neutral brown",
@@ -73,7 +73,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
       technique: "Wet-on-dry with confident, slightly diagonal strokes to suggest ground texture.",
       duration: "10 minutes",
       description:
-        "Establish the ground plane with a warm neutral wash. Leave a few tiny gaps of untouched white paper for sparkle where light would catch the surface.",
+        "Now paint the dirt path across the lower third of your paper. Mix Burnt Sienna with a smaller amount of Ultramarine Blue (about 2 parts sienna to 1 part blue) to make a warm brown, and load it onto your size 8 round brush. Starting at the left edge, pull confident strokes on a slight diagonal all the way across. Leave a few tiny untouched specks of white paper here and there — those little gaps read as sunlight catching the ground.",
     },
     {
       colorMix: "Burnt Sienna + Alizarin Crimson, 1:1, undiluted for strong color",
@@ -83,7 +83,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
         "Wet-on-dry with short, deliberate strokes, building up two light layers rather than one heavy one.",
       duration: "12-15 minutes, with a short dry in between layers",
       description:
-        "Paint the main subject last, once everything around it is dry. Build the color in two thin layers so it stays luminous instead of muddy.",
+        "Paint the red barn last, once everything around it is fully dry. Mix Burnt Sienna and Alizarin Crimson in equal parts, undiluted, for a strong red-brown. Using a small round brush (size 4), start at the top of the barn shape and paint short, deliberate strokes downward to fill in its outline. Let this first layer dry for a few minutes, then repeat with a second light layer over the same area — two thin layers stay bright and clean, where one heavy layer would look muddy.",
     },
   ],
   acrylic: [
@@ -94,7 +94,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
       technique: "Long horizontal strokes, blending top to bottom while the paint is still wet.",
       duration: "10 minutes",
       description:
-        "Block in the sky first with flat, even coverage. Acrylic dries fast, so work the whole area before it starts to set.",
+        "Paint the sky area first. Start from the top of your canvas and work downward. Use a large flat brush (size 12) loaded with a mix of Titanium White and Cerulean Blue in a 3:1 ratio — mostly white with a little blue. Make long, smooth horizontal strokes going left to right, covering the whole sky area evenly before the paint starts to dry (acrylic dries fast, so keep moving).",
     },
     {
       colorMix: "Titanium White + Sap Green + a touch of Yellow Ochre, 2:2:1",
@@ -103,7 +103,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
       technique: "Short horizontal dabs to suggest distant, soft-edged foliage.",
       duration: "10 minutes",
       description:
-        "Once the sky area is touch-dry, block in the background shapes over it. Keep this layer slightly lighter in value than the foreground will be.",
+        "Once the sky is touch-dry, paint the rolling hills that sit just below it. Mix Titanium White, Sap Green, and a small amount of Yellow Ochre in roughly a 2:2:1 ratio and load it onto a size 10 flat brush. Working left to right along the horizon line, use short horizontal dabbing strokes rather than long sweeps — this breaks up the edge and makes the hills read as soft and slightly out of focus, since they're far away.",
     },
     {
       colorMix: "Burnt Umber + Titanium White, 1:1, mixed to a mid-brown",
@@ -112,7 +112,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
       technique: "Confident, slightly overlapping horizontal strokes across the whole ground plane.",
       duration: "10-12 minutes",
       description:
-        "Cover the ground with flat, opaque color. Don't worry about texture yet — that comes in a later detail pass.",
+        "Paint the dirt path across the bottom third of your canvas. Mix Burnt Umber and Titanium White in equal parts to get a mid-brown, and load your size 12 flat brush fully. Starting at the left edge, pull confident horizontal strokes all the way to the right, each stroke overlapping the one above it slightly so there are no gaps of bare canvas.",
     },
     {
       colorMix: "Cadmium Red + Burnt Sienna, 1:1, undiluted for full opacity",
@@ -121,7 +121,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
       technique: "Build the form with layered dabs, then sharpen the outline with a thin brush once dry.",
       duration: "15 minutes",
       description:
-        "Paint the main subject on top of the now-dry background, working from the largest masses down to the smallest defining edges.",
+        "Paint the red barn on top of the now-dry background. Mix Cadmium Red and Burnt Sienna in equal parts, undiluted, and load a size 6 round brush. Build up the barn's shape with layered dabbing strokes, working from the large flat walls first, then switch to a thin size 2 brush once that's dry to paint in the sharp straight edges of the roofline and corners.",
     },
     {
       colorMix: "Titanium White, straight from the tube, for highlights",
@@ -130,7 +130,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
       technique: "Tiny, precise dashes only where light would actually catch a surface.",
       duration: "5-8 minutes",
       description:
-        "Finish with a few small, bright highlights and any last dark accents. A little goes a long way — resist adding too much.",
+        "Finish with a few small highlights. Load a tiny amount of Titanium White, straight from the tube with no mixing, onto a small liner brush (size 1-2). Add short, precise dashes only along the top edge of the barn's roof and one side of its walls — the sides that would actually catch sunlight. A little goes a long way here, so resist covering more than a few small spots.",
     },
   ],
   oil: [
@@ -141,7 +141,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
       technique: "Long, loose horizontal strokes, keeping the paint thin and workable.",
       duration: "10 minutes",
       description:
-        "Block in the sky loosely and thin — this early layer should stay thin so later, thicker layers can go on top without cracking (fat over lean).",
+        "Paint the sky area first. Start from the top of your canvas and work downward. Mix Titanium White and Cerulean Blue and thin it with solvent so it's loose and workable — this first layer needs to stay thin so later, thicker layers can go on top without cracking (painters call this working \"fat over lean\", meaning fatty, oily paint always goes over leaner, thinner paint, never the other way around). Use a large flat bristle brush and make long, loose horizontal strokes left to right.",
     },
     {
       colorMix: "Yellow Ochre + Sap Green + a touch of White, 1:1:1",
@@ -150,7 +150,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
       technique: "Soft, blended dabs, working wet-into-wet with the sky's edge for a hazy transition.",
       duration: "12 minutes",
       description:
-        "Add the distant background while the sky is still workable, blending the two together slightly at the horizon.",
+        "While the sky is still wet, paint the rolling hills just below it. Mix Yellow Ochre, Sap Green, and a touch of White in roughly equal parts, and load a medium filbert brush (size 8). Use soft dabbing strokes along the horizon, gently blending the top edge of the hills into the wet sky above (called working \"wet-into-wet\") so the transition between them looks hazy rather than sharp.",
     },
     {
       colorMix: "Burnt Umber + Ultramarine Blue, 2:1, for a rich neutral",
@@ -159,7 +159,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
       technique: "Broad, slightly diagonal strokes with visible brush texture for interest.",
       duration: "12-15 minutes",
       description:
-        "Establish the ground with thicker, more textured paint than the sky — this is where you can start adding a bit more oil to the mix.",
+        "Paint the dirt path across the bottom of your canvas. Mix Burnt Umber with a smaller amount of Ultramarine Blue (2 parts umber to 1 part blue) for a rich brown, using slightly thicker, oilier paint than you used for the sky. Load your size 8 filbert brush and pull broad strokes on a slight diagonal across the whole path, letting the bristle marks stay visible in the paint for texture.",
     },
     {
       colorMix: "Cadmium Red + Burnt Sienna, 1:1, full-bodied straight from the tube",
@@ -168,7 +168,7 @@ const MEDIUM_STEP_DETAILS: Record<Medium, MediumStepDetails[]> = {
       technique: "Build form with layered wet-into-wet blending, softening edges with a dry brush pass.",
       duration: "20 minutes",
       description:
-        "Paint the main subject with the thickest, most vibrant paint of the piece, blending edges into the background while everything is still wet.",
+        "Paint the red barn with the thickest, most vibrant paint of the whole piece. Mix Cadmium Red and Burnt Sienna in equal parts, full-bodied straight from the tube, and load a size 6 round brush. Build up the walls and roof with layered strokes while the background is still workable, blending the barn's edges softly into the ground where they meet, then switch to a size 2 liner brush to paint in the sharp lines of the roof edge and corners.",
     },
   ],
 };
@@ -189,11 +189,11 @@ function buildMockSteps(
 ): InstructionStep[] {
   const details = MEDIUM_STEP_DETAILS[medium];
   const titles = [
-    "Map the shapes",
-    "Block in the sky",
-    "Establish the background",
-    "Build the ground",
-    "Paint the main subject",
+    "Sketch the shapes",
+    "Paint the sky",
+    "Paint the rolling hills",
+    "Paint the dirt path",
+    "Paint the red barn",
     "Add final highlights",
   ];
 
@@ -202,10 +202,10 @@ function buildMockSteps(
     title: titles[0],
     description:
       skillLevel === "beginner"
-        ? "Lightly sketch the shapes shown in the outline before touching any paint. Keep the lines loose and just place where each zone goes — accuracy isn't important yet."
+        ? "Before touching any paint, lightly sketch the four shapes shown in the photo above using a pencil: the sky at the top, the rolling hills below it, the dirt path along the bottom, and the red barn in the middle. Keep your pencil lines light and loose — you're just marking where each area goes on your canvas, not drawing details, so don't worry about getting the lines perfectly accurate yet."
         : skillLevel === "intermediate"
-        ? "Rough in the main shapes from the outline to establish proportions before painting."
-        : "Rough in proportions from the outline; keep it minimal.",
+        ? "Rough in the sky, hills, path, and barn shapes from the photo above to establish proportions before you start painting."
+        : "Rough in proportions for the sky, hills, path, and barn from the photo above; keep it minimal.",
     zoneIds: zoneOrder,
     brush: "Pencil or a thin round brush, size 2",
     technique: "Light, loose lines — just enough to see where each zone begins and ends.",
@@ -239,7 +239,7 @@ function getMockAnalysis(
     shapes: [
       {
         id: "sky",
-        label: "Sky",
+        label: "Clear blue sky",
         points: [
           [0.0, 0.0],
           [1.0, 0.0],
@@ -250,7 +250,7 @@ function getMockAnalysis(
       },
       {
         id: "background",
-        label: "Distant hills",
+        label: "Rolling green hills",
         points: [
           [0.0, 0.42],
           [0.35, 0.35],
@@ -263,7 +263,7 @@ function getMockAnalysis(
       },
       {
         id: "ground",
-        label: "Ground / foreground",
+        label: "Dirt path foreground",
         points: [
           [0.0, 0.58],
           [1.0, 0.58],
@@ -274,7 +274,7 @@ function getMockAnalysis(
       },
       {
         id: "focal",
-        label: "Main subject",
+        label: "Red barn",
         points: [
           [0.38, 0.5],
           [0.62, 0.48],
