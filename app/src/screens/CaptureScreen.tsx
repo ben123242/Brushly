@@ -22,6 +22,16 @@ function mediumLabel(medium: string): string {
   return medium.charAt(0).toUpperCase() + medium.slice(1);
 }
 
+function errorDetail(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return String(error);
+  }
+}
+
 export default function CaptureScreen({ navigation, route }: Props) {
   const { medium, skillLevel } = route.params;
   const [photo, setPhoto] = useState<ProcessedPhoto | null>(null);
@@ -35,7 +45,9 @@ export default function CaptureScreen({ navigation, route }: Props) {
       if (!permission.granted) {
         Alert.alert(
           "Camera access needed",
-          "Enable camera access in Settings to take a photo."
+          permission.canAskAgain
+            ? "Brushly needs camera access to take a photo. Please allow it and try again."
+            : "Camera access is turned off for Brushly. Enable it in your device Settings > Apps > Brushly > Permissions."
         );
         return;
       }
@@ -48,10 +60,7 @@ export default function CaptureScreen({ navigation, route }: Props) {
       setPhoto(processed);
     } catch (error) {
       console.error("Failed to take photo", error);
-      Alert.alert(
-        "Couldn't open the camera",
-        "Something went wrong while opening the camera. Please try again."
-      );
+      Alert.alert("Couldn't open the camera", errorDetail(error));
     } finally {
       setProcessing(false);
     }
@@ -86,10 +95,7 @@ export default function CaptureScreen({ navigation, route }: Props) {
       setPhoto(processed);
     } catch (error) {
       console.error("Failed to open photo library", error);
-      Alert.alert(
-        "Couldn't open your photos",
-        "Something went wrong while opening your photo library. Please try again."
-      );
+      Alert.alert("Couldn't open your photos", errorDetail(error));
     } finally {
       setProcessing(false);
     }
