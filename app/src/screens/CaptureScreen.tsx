@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Alert,
   Image,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -30,36 +31,59 @@ export default function CaptureScreen({ navigation, route }: Props) {
   const [photo, setPhoto] = useState<PickedPhoto | null>(null);
 
   async function takePhoto() {
-    const permission = await ImagePicker.requestCameraPermissionsAsync();
-    if (!permission.granted) {
+    try {
+      const permission = await ImagePicker.requestCameraPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert(
+          "Camera access needed",
+          "Enable camera access in Settings to take a photo."
+        );
+        return;
+      }
+      const result = await ImagePicker.launchCameraAsync({
+        quality: 0.7,
+        base64: true,
+      });
+      handlePickerResult(result);
+    } catch (error) {
+      console.error("Failed to open camera", error);
       Alert.alert(
-        "Camera access needed",
-        "Enable camera access in Settings to take a photo."
+        "Couldn't open the camera",
+        "Something went wrong while opening the camera. Please try again."
       );
-      return;
     }
-    const result = await ImagePicker.launchCameraAsync({
-      quality: 0.7,
-      base64: true,
-    });
-    handlePickerResult(result);
   }
 
   async function chooseFromLibrary() {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) {
+    try {
+      // On Android, launchImageLibraryAsync uses the system Photo Picker,
+      // which needs no runtime permission — requesting one first can return
+      // a false "denied" in some setups and block the picker from opening.
+      // Media library permission is only required on iOS.
+      if (Platform.OS === "ios") {
+        const permission =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permission.granted) {
+          Alert.alert(
+            "Photo library access needed",
+            "Enable photo library access in Settings to choose a photo."
+          );
+          return;
+        }
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 0.7,
+        base64: true,
+      });
+      handlePickerResult(result);
+    } catch (error) {
+      console.error("Failed to open photo library", error);
       Alert.alert(
-        "Photo library access needed",
-        "Enable photo library access in Settings to choose a photo."
+        "Couldn't open your photos",
+        "Something went wrong while opening your photo library. Please try again."
       );
-      return;
     }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0.7,
-      base64: true,
-    });
-    handlePickerResult(result);
   }
 
   function handlePickerResult(result: ImagePicker.ImagePickerResult) {

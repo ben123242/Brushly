@@ -22,14 +22,20 @@
     },
     "android": {
       "package": "com.neil1213537.brushly",
-      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE"]
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VIDEO"
+      ]
     },
     "plugins": [
       [
         "expo-image-picker",
         {
           "photosPermission": "Brushly needs photo library access so you can choose a scene to turn into a painting lesson.",
-          "cameraPermission": "Brushly needs camera access so you can photograph a scene to turn into a painting lesson."
+          "cameraPermission": "Brushly needs camera access so you can photograph a scene to turn into a painting lesson.",
+          "microphonePermission": false
         }
       ]
     ]
