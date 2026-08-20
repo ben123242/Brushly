@@ -8,6 +8,7 @@
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "backgroundColor": "#0B0B0D",
+    "icon": "./assets/icon.png",
     "splash": {
       "backgroundColor": "#0B0B0D",
       "resizeMode": "contain"
@@ -27,7 +28,11 @@
         "READ_EXTERNAL_STORAGE",
         "READ_MEDIA_IMAGES",
         "READ_MEDIA_VIDEO"
-      ]
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0B0B0D"
+      }
     },
     "plugins": [
       [

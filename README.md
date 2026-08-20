@@ -87,6 +87,12 @@ in the app needs to change.
 
 ## Notes
 
+- `app/assets/icon.png` (1024x1024, opaque) and `app/assets/adaptive-icon.png` (1024x1024, transparent
+  foreground) are the app icons, referenced from `app.json` via `expo.icon` and
+  `expo.android.adaptiveIcon`. Both were generated from a single SVG source (a paintbrush with a
+  colorful paint-stroke gradient in the app's own accent palette, gold metal ferrule/handle, on the
+  app's dark background) — the adaptive icon's artwork is scaled down further so it survives Android's
+  circular/squircle launcher mask safe zone.
 - The mobile app deliberately keeps the UI simple: three screens, large buttons, minimal choices.
 - `expo-image-picker` is used for both "take a photo" and "choose from library" — no custom camera
   viewfinder is built, keeping the capture flow reliable across devices. The picker itself is asked
